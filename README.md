@@ -1,308 +1,407 @@
-# 🚀 Catálogo de Produtos — React + Node.js + Express
+# 🤖 Aplicação com IA Generativa — React + Node.js + Gemini API
 
-Projeto base utilizado na série de evolução de uma aplicação web com **Inteligência Artificial** no canal **Desvendando o Código**.
+Projeto desenvolvido para demonstrar, passo a passo, como adicionar **Inteligência Artificial Generativa a uma aplicação web tradicional** utilizando **React, Node.js, Express e Gemini API**.
 
-A aplicação foi desenvolvida utilizando **React no frontend** e **Node.js + Express no backend**, seguindo uma arquitetura baseada em **API REST**.
+A proposta não é substituir a programação pela IA.
 
-A partir deste projeto base, novas funcionalidades serão implementadas progressivamente, incluindo recursos de **Inteligência Artificial Generativa**.
+A ideia é mostrar como uma aplicação que já possui frontend, backend, rotas e regras de negócio pode evoluir e passar a utilizar um modelo de IA para resolver problemas específicos.
 
----
-
-# 📺 De onde veio este projeto?
-
-Este projeto não começa do zero.
-
-A base utilizada neste repositório foi desenvolvida passo a passo anteriormente no canal **Desvendando o Código**, na live:
-
-## CRUD Completo com React, Node.js e Express | Editar e Excluir na API REST
-
-▶️ **Assista à live completa:**
-
-https://www.youtube.com/live/zGBoDvgfDp4
-
-Nessa aula você encontra o passo a passo da construção da aplicação utilizada como base para esta nova sequência.
-
-Se você ainda não conhece o projeto ou deseja entender como o **CRUD com React, Node.js e Express** foi desenvolvido, recomendo começar por essa live.
+> **Uma aplicação. Várias evoluções. Cada nova tecnologia entrando para resolver um novo problema.**
 
 ---
 
-# 🎯 Objetivo do projeto
+## 🎯 Objetivo do projeto
 
-A proposta é partir de uma aplicação web tradicional já funcionando e evoluí-la progressivamente com novas tecnologias.
-
-Em vez de criar um novo projeto para cada conceito estudado, utilizaremos a mesma aplicação como laboratório para novas implementações.
-
-Inicialmente temos:
-
-```text
-React
-   ↓
-Node.js + Express
-   ↓
-API REST
-   ↓
-CRUD de Produtos
-```
-
-Nas próximas etapas, adicionaremos recursos de Inteligência Artificial à aplicação.
-
----
-
-# 🛒 Projeto Base — Catálogo de Produtos
-
-Antes da integração com Inteligência Artificial, a aplicação já possui funcionalidades como:
-
-- cadastro de produtos;
-- listagem de produtos;
-- busca de produtos;
-- edição de produtos;
-- exclusão de produtos;
-- formulário de produtos;
-- comunicação entre React e Node.js;
-- API REST desenvolvida com Express.
-
-Os produtos possuem informações como:
-
-- nome;
-- descrição;
-- preço.
-
-Nesta versão inicial do projeto, os dados são mantidos **em memória**.
-
-O objetivo desta base não é trabalhar persistência em banco de dados, mas fornecer uma aplicação funcional para que possamos concentrar os estudos nas próximas implementações.
-
----
-
-# 🧰 Tecnologias utilizadas
-
-## Frontend
+O projeto parte de uma aplicação de cadastro de produtos construída com:
 
 - React
-- JavaScript
-- HTML
-- CSS
-
-## Backend
-
 - Node.js
 - Express
-
-## Arquitetura
-
+- JavaScript
 - API REST
-- comunicação HTTP;
-- JSON;
-- separação entre frontend e backend.
 
----
+A partir dessa base, novas funcionalidades de Inteligência Artificial são adicionadas progressivamente.
 
-# 📂 Estrutura geral do projeto
+Na **Parte 02**, adicionamos uma funcionalidade capaz de gerar automaticamente a descrição de um produto utilizando a **Gemini API**.
 
-A aplicação está dividida em duas partes principais:
-
-```text
-projeto/
-│
-├── backend/
-│   ├── src/
-│   │   ├── controllers/
-│   │   ├── routes/
-│   │   └── app.js
-│   │
-│   └── package.json
-│
-└── frontend/
-    ├── src/
-    └── package.json
-```
-
-O **frontend React** é responsável pela interface com o usuário.
-
-O **backend Node.js + Express** é responsável pelas regras da aplicação e pela disponibilização da API REST.
-
----
-
-# ▶️ Como executar o projeto
-
-## 1. Clone o repositório
-
-```bash
-git clone URL_DO_REPOSITORIO
-```
-
-Depois entre na pasta do projeto.
-
----
-
-## 2. Backend
-
-Entre na pasta do backend:
-
-```bash
-cd backend
-```
-
-Instale as dependências:
-
-```bash
-npm install
-```
-
-Execute o backend:
-
-```bash
-npm start
-```
-
-O servidor será iniciado de acordo com a configuração existente no projeto.
-
----
-
-## 3. Frontend
-
-Abra outro terminal e entre na pasta do frontend:
-
-```bash
-cd frontend
-```
-
-Instale as dependências:
-
-```bash
-npm install
-```
-
-Execute o projeto:
-
-```bash
-npm run dev
-```
-
-Depois acesse no navegador o endereço informado pelo ambiente de desenvolvimento.
-
----
-
-# 🧠 Próxima evolução — Inteligência Artificial
-
-Este projeto será utilizado como base para uma nova sequência de estudos envolvendo **Inteligência Artificial Generativa aplicada ao desenvolvimento de software**.
-
-Nossa primeira evolução será adicionar uma funcionalidade capaz de gerar automaticamente a descrição de um produto utilizando IA.
-
-A ideia será transformar este fluxo:
+O fluxo passa a ser:
 
 ```text
 React
-   ↓
-Node.js + Express
-   ↓
-CRUD
-```
-
-em:
-
-```text
-React
-   ↓
-Node.js + Express
-   ↓
+  ↓
+Node.js / Express
+  ↓
 Gemini API
-   ↓
-Modelo de IA
-   ↓
-Node.js
-   ↓
+  ↓
+Node.js / Express
+  ↓
 React
 ```
 
-O usuário informará dados do produto e poderá solicitar que a Inteligência Artificial gere uma descrição automaticamente.
+O frontend não acessa diretamente a Gemini API.
+
+A comunicação com a IA acontece através do backend da aplicação.
 
 ---
 
-# 🤖 Implementação 01 — Integração com IA Generativa
+# 📚 Evolução do projeto
 
-Na primeira evolução deste projeto, estudaremos como integrar uma aplicação existente com um modelo de Inteligência Artificial.
+## Parte 01 — Projeto base
 
-Durante essa implementação serão abordados conceitos como:
+Construção da aplicação tradicional utilizando:
 
-- Inteligência Artificial Generativa;
-- LLM — Large Language Model;
-- modelos de IA;
+- React no frontend;
+- Node.js no backend;
+- Express;
+- API REST;
+- CRUD de produtos;
+- comunicação entre frontend e backend.
+
+Nesta etapa ainda não existe Inteligência Artificial.
+
+Ela representa a aplicação que posteriormente será evoluída.
+
+---
+
+## Parte 02 — Integração com Gemini API
+
+Nesta etapa adicionamos **IA Generativa ao projeto existente**.
+
+A aplicação passa a permitir que o usuário informe os dados de um produto e utilize a IA para gerar automaticamente sua descrição.
+
+### Funcionalidades implementadas
+
+- integração com Gemini API;
+- SDK `@google/genai`;
+- variável de ambiente `GEMINI_API_KEY`;
+- controller específico para IA;
+- criação do prompt;
+- chamada ao modelo Gemini;
+- `async/await`;
+- rota específica para geração;
+- integração da rota com Express;
+- comunicação React → Node.js → Gemini;
+- botão **Gerar com IA**;
+- estado de loading;
+- tratamento de erros;
+- tratamento do erro `429`;
+- tratamento de erros internos;
+- depuração de erro `500`;
+- retorno da resposta para o frontend;
+- preenchimento da descrição gerada pela IA.
+
+---
+
+# 🎥 Vídeo da Parte 02
+
+A implementação completa da integração com IA está disponível no canal **Desvendando o Código**.
+
+## Como Colocar IA no Seu Projeto React + Node.js | Gemini API
+
+▶️ **Assista ao vídeo:**
+
+https://www.youtube.com/watch?v=uugS_fMMMG4
+
+No vídeo são abordados conceitos importantes antes da implementação, incluindo:
+
+- IA Generativa;
+- LLM;
 - prompts;
 - tokens;
-- APIs;
 - API Key;
-- SDK;
-- variáveis de ambiente;
-- integração com Gemini API;
-- comunicação entre React e Node.js;
-- programação assíncrona;
+- Gemini API;
+- SDK `@google/genai`;
+- integração frontend/backend;
+- controllers;
+- rotas;
 - tratamento de erros;
-- limites de utilização de APIs;
-- erro HTTP 429.
-
-O objetivo não será apenas fazer a IA responder.
-
-Vamos entender **como uma funcionalidade de IA pode fazer parte da arquitetura de uma aplicação real**.
+- limites da API;
+- erro `429`;
+- erro `500`;
+- depuração de problemas reais durante a integração.
 
 ---
 
-# 🔑 API Key e variáveis de ambiente
+# 🧠 Arquitetura da integração com IA
 
-Nas versões que utilizarem serviços externos de Inteligência Artificial, as chaves de acesso deverão permanecer no **backend**.
+A aplicação utiliza o backend como intermediário entre o frontend e o serviço de IA.
 
-Nunca coloque uma API Key diretamente no frontend.
+```text
+┌──────────────┐
+│    React     │
+│   Frontend   │
+└──────┬───────┘
+       │
+       │ HTTP
+       ↓
+┌──────────────┐
+│   Node.js    │
+│   Express    │
+│   Backend    │
+└──────┬───────┘
+       │
+       │ Gemini SDK
+       ↓
+┌──────────────┐
+│  Gemini API  │
+│      IA      │
+└──────┬───────┘
+       │
+       ↓
+┌──────────────┐
+│   Node.js    │
+│   Express    │
+└──────┬───────┘
+       │
+       ↓
+┌──────────────┐
+│    React     │
+│  Descrição   │
+└──────────────┘
+```
 
-A chave poderá ser armazenada em um arquivo `.env`.
+Essa arquitetura evita colocar a **API Key da Gemini diretamente no frontend**.
+
+---
+
+# 🔐 Variáveis de ambiente
+
+A chave da Gemini API deve ficar armazenada no arquivo `.env` do backend.
 
 Exemplo:
 
 ```env
-GEMINI_API_KEY=sua_chave_aqui
+GEMINI_API_KEY=SUA_CHAVE_AQUI
 ```
 
-O arquivo `.env` não deve ser enviado para o GitHub.
+⚠️ **Nunca publique sua API Key no GitHub.**
 
-Certifique-se de que ele esteja incluído no arquivo:
+O arquivo `.env` deve estar incluído no `.gitignore`.
 
-```text
-.gitignore
+Exemplo:
+
+```gitignore
+node_modules/
+.env
 ```
-
-Uma alternativa é disponibilizar no repositório um arquivo:
-
-```text
-.env.example
-```
-
-contendo apenas:
-
-```env
-GEMINI_API_KEY=
-```
-
-Assim, quem utilizar o projeto saberá qual variável precisa configurar sem que nenhuma chave real seja publicada.
 
 ---
 
-# 🗺️ Evolução do projeto
+# 📦 Gemini SDK
 
-A ideia é evoluir a mesma aplicação progressivamente.
+Para realizar a integração utilizamos o SDK:
+
+```bash
+npm install @google/genai
+```
+
+Importação:
+
+```javascript
+import { GoogleGenAI } from "@google/genai";
+```
+
+A chave é recuperada através das variáveis de ambiente:
+
+```javascript
+process.env.GEMINI_API_KEY
+```
+
+---
+
+# 🧠 Prompt
+
+O backend é responsável por montar o prompt enviado ao modelo.
+
+A aplicação utiliza as informações do produto para fornecer contexto à IA.
+
+Fluxo simplificado:
 
 ```text
-PROJETO BASE
-React + Node.js + Express + CRUD
+Dados do produto
+      ↓
+Construção do prompt
+      ↓
+Gemini API
+      ↓
+Descrição gerada
+      ↓
+Backend
+      ↓
+Frontend
+```
+
+Isso permite que a IA seja utilizada como **uma funcionalidade dentro da aplicação**, e não como substituta da lógica do sistema.
+
+---
+
+# ⚠️ Tratamento de erros
+
+Uma integração com serviços externos precisa considerar situações em que a API pode falhar.
+
+Durante o projeto são tratados diferentes tipos de erro.
+
+### 400
+
+Problemas relacionados aos dados enviados pela aplicação.
+
+### 429
+
+Limite de requisições da API atingido.
+
+```text
+Too Many Requests
+```
+
+Esse erro pode ocorrer quando o limite disponível para utilização do modelo é excedido.
+
+### 500
+
+Erro interno da aplicação.
+
+Durante o desenvolvimento da Parte 02 ocorreu um erro `500` real.
+
+O problema foi investigado utilizando:
+
+```text
+problema
+↓
+hipótese
+↓
+console / logs
+↓
+teste
+↓
+erro
+↓
+investigação
+↓
+correção
+↓
+novo teste
+```
+
+A depuração faz parte do processo de desenvolvimento e foi mantida no vídeo justamente para demonstrar como investigar esse tipo de problema.
+
+### 502
+
+Pode ser utilizado quando o backend encontra problemas ao se comunicar com um serviço externo.
+
+---
+
+# ▶️ Executando o projeto
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/marcoscaldas/aplicacao-ia-generativa-react-node.git
+```
+
+Entre na pasta do projeto:
+
+```bash
+cd aplicacao-ia-generativa-react-node
+```
+
+Instale as dependências necessárias.
+
+No backend:
+
+```bash
+npm install
+```
+
+No frontend:
+
+```bash
+npm install
+```
+
+Configure a variável:
+
+```env
+GEMINI_API_KEY=SUA_CHAVE_AQUI
+```
+
+Depois execute o backend e o frontend conforme a estrutura do projeto.
+
+---
+
+# 🛡️ Segurança
+
+Alguns cuidados importantes ao trabalhar com APIs de Inteligência Artificial:
+
+- nunca colocar API Keys diretamente no frontend;
+- nunca publicar `.env`;
+- validar os dados recebidos;
+- tratar falhas da API externa;
+- tratar limites de requisição;
+- registrar erros importantes;
+- evitar retornar informações internas do servidor ao usuário.
+
+A IA deve ser tratada como qualquer outro **serviço externo consumido pela aplicação**.
+
+---
+
+# 🔮 Parte 03 — Resposta estruturada com JSON
+
+Atualmente o projeto solicita à IA principalmente uma descrição em texto.
+
+Exemplo:
+
+```text
+Gemini → descrição
+```
+
+Na próxima evolução, a aplicação poderá solicitar vários dados estruturados.
+
+Exemplo:
+
+```json
+{
+  "descricao": "Mouse gamer desenvolvido para...",
+  "categoria": "Periféricos",
+  "tags": [
+    "gamer",
+    "computador",
+    "periférico"
+  ],
+  "resumo": "Mouse gamer com foco em precisão e desempenho."
+}
+```
+
+Isso abre um novo problema:
+
+> **Hoje a IA devolve um texto. Mas e se a aplicação precisar receber vários dados separados e utilizar cada informação no sistema?**
+
+A partir daí podemos trabalhar com **respostas estruturadas em JSON**.
+
+---
+
+# 🗺️ Roadmap
+
+A evolução planejada do projeto inclui:
+
+```text
+Aplicação tradicional
         ↓
-IMPLEMENTAÇÃO 01
-Integração com LLM
+Gemini API
         ↓
-IMPLEMENTAÇÃO 02
-Respostas estruturadas
+Prompt
         ↓
-Validação dos dados
+Resposta em texto
         ↓
-Tratamento de falhas
+JSON estruturado
         ↓
-Logs e testes
+Validação
+        ↓
+Retry / Timeout
+        ↓
+Logs
+        ↓
+Testes
+        ↓
+Persistência
         ↓
 RAG
         ↓
@@ -310,143 +409,86 @@ Embeddings
         ↓
 Busca semântica
         ↓
-Agentes
+Banco vetorial
+        ↓
+Agentes / Tools
+        ↓
+Segurança e autenticação
 ```
 
-Cada etapa será introduzida quando surgir um problema ou uma necessidade que justifique a utilização da nova tecnologia.
+A ideia é introduzir cada conceito quando surgir **um problema que justifique sua utilização**.
 
 ---
 
-# 📚 Metodologia
+# 🛠️ Tecnologias
 
-A evolução do projeto seguirá uma abordagem baseada em resolução de problemas.
+- JavaScript
+- React
+- Node.js
+- Express
+- API REST
+- Gemini API
+- Google GenAI SDK
+- IA Generativa
+- LLM
+- Git
+- GitHub
+
+---
+
+# 📺 Desvendando o Código
+
+Este projeto faz parte dos conteúdos produzidos pelo **Desvendando o Código**, com foco em desenvolvimento de software através de projetos e problemas reais.
+
+A proposta é não apenas mostrar código pronto, mas trabalhar o processo:
 
 ```text
 PROBLEMA
    ↓
-O que precisamos?
+IDENTIFICAR O QUE PRECISAMOS
    ↓
-Conceitos e tecnologias
+ESCOLHER OS CONCEITOS E SINTAXES
    ↓
-Implementação
+ESCREVER
    ↓
-Teste
+TESTAR
    ↓
-Erros e problemas
+ENCONTRAR ERROS
    ↓
-Correção
+CORRIGIR
    ↓
-Por que funciona?
+ENTENDER POR QUE FUNCIONOU
 ```
 
-A proposta é não utilizar uma tecnologia apenas porque ela existe.
+🎥 **Vídeo da integração com IA:**
 
-Primeiro identificamos o problema.
-
-Depois entendemos **qual tecnologia pode ajudar a resolvê-lo e por quê**.
+https://www.youtube.com/watch?v=uugS_fMMMG4
 
 ---
 
-# 💡 Por que utilizar o mesmo projeto?
+## 👨‍💻 Autor
 
-Ao invés de criar pequenos exemplos desconectados para cada assunto, este projeto será evoluído ao longo dos estudos.
+**Professor Marcos**
 
-Isso permite acompanhar como uma aplicação tradicional pode ganhar novas capacidades progressivamente.
+Desvendando o Código®
 
-Começamos com:
+Conteúdo sobre:
+
+- JavaScript;
+- React;
+- Node.js;
+- APIs REST;
+- desenvolvimento web;
+- Inteligência Artificial aplicada ao desenvolvimento de software.
+
+---
+
+## 📌 Status do projeto
 
 ```text
-React
-+
-Node.js
-+
-Express
-+
-API REST
-+
-CRUD
+Parte 01 — CRUD React + Node.js + Express       ✅
+Parte 02 — Integração com Gemini API            ✅
+Parte 03 — Resposta estruturada com JSON        🔜
 ```
 
-e adicionaremos novos recursos à medida que avançarmos.
-
-Dessa forma, será possível acompanhar não apenas códigos isolados, mas também a **evolução da arquitetura da aplicação**.
-
----
-
-# 🏷️ Versões do projeto
-
-A ideia é preservar diferentes estágios da aplicação.
-
-Exemplo:
-
-```text
-v0-base
-│
-│  React + Node.js + Express + CRUD
-│
-▼
-v1-gemini
-│
-│  Integração inicial com Gemini API
-│
-▼
-v2-json
-│
-│  Respostas estruturadas
-│
-▼
-v3-robustez
-│
-│  Tratamento de falhas, timeout e retry
-│
-▼
-...
-```
-
-Assim será possível consultar tanto o **projeto inicial** quanto as diferentes etapas de evolução.
-
----
-
-# ⚠️ Importante
-
-Nunca publique:
-
-- API Keys;
-- senhas;
-- tokens de acesso;
-- credenciais;
-- arquivos `.env` contendo informações reais.
-
-Antes de realizar um commit, sempre verifique quais arquivos estão sendo enviados para o repositório.
-
----
-
-# 📺 Acompanhe a evolução
-
-Este projeto faz parte dos conteúdos publicados no canal:
-
-## Desvendando o Código
-
-A proposta é estudar programação através da construção de projetos e da resolução de problemas reais.
-
-O projeto será atualizado conforme novas implementações forem desenvolvidas nas aulas e lives.
-
----
-
-# 👨‍🏫 Professor Marcos
-
-**Desvendando o Código**
-
-Programação, desenvolvimento web, APIs, JavaScript, Node.js, React e Inteligência Artificial aplicada ao desenvolvimento de software.
-
----
-
-## 📌 Comece pela base
-
-Se você ainda não acompanhou a construção deste projeto, assista primeiro:
-
-### CRUD Completo com React, Node.js e Express | Editar e Excluir na API REST
-
-https://www.youtube.com/live/zGBoDvgfDp4
-
-Depois disso, acompanhe as próximas implementações e veja o projeto evoluir passo a passo.
+**Projeto em evolução.**

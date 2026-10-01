@@ -1,5 +1,9 @@
+require("dotenv").config()
+
 const express = require("express");
 const produtoRoutes = require("./routes/produtoRoutes");
+const iaRoutes = require('./routes/iaRoutes')
+
 
 const app = express();
 const PORT = 3000;
@@ -8,6 +12,10 @@ const PORT = 3000;
 app.use(express.json());
 
 app.use("/api/produtos", produtoRoutes);
+
+app.use("/api/ia", iaRoutes);
+
+
 
 app.listen(PORT, () => {
   console.log(`Servidor executando em http://localhost:${PORT}`);

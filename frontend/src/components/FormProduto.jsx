@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"; // ALTERADO: adicionado useEffect
 
+// ALTERADO: novas props para edição
 function FormProduto({ aoCadastrar, aoAlterar, produtoEmEdicao, aoCancelarEdicao }) {
   const [nome, setNome] = useState("");
   const [descricao, setDescricao] = useState("");
@@ -8,28 +9,66 @@ function FormProduto({ aoCadastrar, aoAlterar, produtoEmEdicao, aoCancelarEdicao
 
   const [erro, setErro] = useState("")
 
-  //carregar produto no form
+  // NOVO IA: controla o estado do botão enquanto o Gemini responde.
+  const [gerandoDescricao, setGerandoDescricao] = useState(false);
 
-  useEffect(()=>{
-
-    if(produtoEmEdicao){
-
-      setNome(produtoEmEdicao.nome)
-      setDescricao(produtoEmEdicao.descricao || "")
-      setPreco(produtoEmEdicao.preco)
+  // ==================== NOVO: carregar produto no formulário ====================
+  useEffect(() => {
+    if (produtoEmEdicao) {
+      setNome(produtoEmEdicao.nome);
+      setDescricao(produtoEmEdicao.descricao || "");
+      setPreco(produtoEmEdicao.preco);
     }
+  }, [produtoEmEdicao]);
+  // ============================================================================
 
-  }, [produtoEmEdicao] );
-
-
-  function limparFormulario(){
-
+  // ==================== NOVO: limpar formulário ====================
+  function limparFormulario() {
     setNome("");
     setDescricao("");
     setPreco("");
-    setErro("")
-
+    setErro("");
   }
+  // ================================================================
+
+  // ==================== NOVO IA: gerar descrição ====================
+  async function gerarDescricaoComIA() {
+    if (!nome.trim()) {
+      setErro("Digite o nome do produto antes de gerar a descrição.");
+      return;
+    }
+
+    setErro("");
+    setGerandoDescricao(true);
+
+    try {
+      const resposta = await fetch("/api/ia/descricao", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ nome: nome.trim(), preco })
+      });
+
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        // Mantém visível o código HTTP retornado pelo backend.
+        // Ex.: 429 quando a cota do Gemini for atingida.
+        setErro(dados.mensagem || `Erro ${resposta.status} — não foi possível gerar a descrição.`);
+        return;
+      }
+
+      // A resposta da IA passa diretamente para o campo descrição.
+      setDescricao(dados.descricao);
+    } catch (erro) {
+      console.error(erro);
+      setErro("Não foi possível conectar ao serviço de IA.");
+    } finally {
+      setGerandoDescricao(false);
+    }
+  }
+  // =================================================================
 
   function enviarFormulario(evento) {
     evento.preventDefault();
@@ -50,50 +89,41 @@ function FormProduto({ aoCadastrar, aoAlterar, produtoEmEdicao, aoCancelarEdicao
       nome: nome.trim(),
       descricao: descricao.trim(),
       preco: Number(preco)
-    }
+    };
 
-
-    //CADASTRAR OU ALTERAR
-
-    if(produtoEmEdicao){
+    // ==================== ALTERADO: cadastrar OU alterar ====================
+    if (produtoEmEdicao) {
       aoAlterar({
         id: produtoEmEdicao.id,
         ...produto
-      })
-    }else{
-      aoCadastrar(produto)
+      });
+    } else {
+      aoCadastrar(produto);
     }
+    // =======================================================================
 
-    // aoCadastrar({
-    //   nome: nome.trim(),
-    //   descricao: descricao.trim(),
-    //   preco: Number(preco)
-    // });
-
-    limparFormulario()
+    limparFormulario();
   }
 
-  function cancelarEdicao(){
-    limparFormulario()
-    aoCancelarEdicao()
-
+  // ==================== NOVO: cancelar edição ====================
+  function cancelarEdicao() {
+    limparFormulario();
+    aoCancelarEdicao();
   }
+  // ==============================================================
 
   return (
     <form className="formulario" onSubmit={enviarFormulario}>
 
       <div className="titulo-formulario">
 
-
         <div>
-          <span className="tag">{produtoEmEdicao ? 'EDITANDO ITEM' : 'NOVO ITEM'}</span>
-          <h2>{produtoEmEdicao ? 'Alterar produto' : 'Cadastrar produto'}</h2>
+          {/* ALTERADO: título muda durante a edição */}
+          <span className="tag">{produtoEmEdicao ? "EDITANDO ITEM" : "NOVO ITEM"}</span>
+          <h2>{produtoEmEdicao ? "Alterar produto" : "Cadastrar produto"}</h2>
         </div>
         <span className="status-dot">ONLINE</span>
-
-      </div>  
-
-
+      </div>     
 
       <div className="campos-formulario">
 
@@ -109,12 +139,23 @@ function FormProduto({ aoCadastrar, aoAlterar, produtoEmEdicao, aoCancelarEdicao
 
         <label>
           Descrição
-          <input
-            type="text"
-            value={descricao}
-            onChange={(evento) => setDescricao(evento.target.value)}
-            placeholder="Descrição do produto"
-          />
+          <div className="campo-descricao-ia">
+            <input
+              type="text"
+              value={descricao}
+              onChange={(evento) => setDescricao(evento.target.value)}
+              placeholder="Descrição do produto"
+            />
+
+            <button
+              type="button"
+              className="botao-ia"
+              onClick={gerarDescricaoComIA}
+              disabled={gerandoDescricao}
+            >
+              {gerandoDescricao ? "Gerando..." : "✨ Gerar com IA"}
+            </button>
+          </div>
         </label>
 
         <label>
@@ -130,24 +171,24 @@ function FormProduto({ aoCadastrar, aoAlterar, produtoEmEdicao, aoCancelarEdicao
         </label>
       </div>
 
-      {/* ALTERADO: BOTOES DE CADASTRO/EDICAO */}
+      {/* ==================== ALTERADO: botões de cadastro/edição ==================== */}
+      <div className="acoes-formulario">
+        <button type="submit">
+          {produtoEmEdicao ? "Salvar alterações" : "+ Cadastrar produto"}
+        </button>
 
-        <div className="acoes-formulario">
-
-          <button type="submit"> 
-            {produtoEmEdicao ? 'Salvar alterações': '+ Cadastrar produto'}
+        {produtoEmEdicao && (
+          <button type="button" className="botao-cancelar" onClick={cancelarEdicao}>
+            Cancelar
           </button>
+        )}
+      </div>
+      {/* ============================================================================ */}
 
-          {produtoEmEdicao &&(
+      {/* NOVO: exibição da validação que já existia no estado erro */}
+      {erro && <p className="mensagem-erro">{erro}</p>}
 
-            <button type="button" className="botao-cancelar" onClick={cancelarEdicao}>
-              Cancelar
-            </button>
-          )}
-        </div>         
-          
-          {erro && <p className="mensagem-erro">{erro}</p>}
-      </form>
+    </form>
     
   );
 }
