@@ -1,0 +1,82 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f6f8;
+  color: #20242a;
+}
+
+.header {
+  padding: 28px 20px;
+  text-align: center;
+  background: #20242a;
+  color: white;
+}
+
+.header h1,
+.header p {
+  margin: 6px 0;
+}
+
+.container {
+  width: min(1000px, 92%);
+  margin: 30px auto;
+}
+
+.formulario {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+  margin-bottom: 30px;
+  background: white;
+  border-radius: 10px;
+}
+
+.formulario label {
+  display: grid;
+  gap: 6px;
+  font-weight: bold;
+}
+
+.formulario input {
+  padding: 11px;
+  border: 1px solid #c9cdd2;
+  border-radius: 6px;
+}
+
+.formulario button {
+  padding: 12px;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.titulo-secao {
+  margin-top: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+.mensagem {
+  padding: 12px;
+  background: white;
+  border-radius: 6px;
+}
