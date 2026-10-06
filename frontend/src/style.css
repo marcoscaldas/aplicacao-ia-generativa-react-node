@@ -611,3 +611,34 @@ input {
     min-height: 44px;
   }
 }
+
+
+/* ====================== LIVE 147 - DADOS ESTRUTURADOS DA IA ====================== */
+
+.tags-ia {
+  margin-top: 2px;
+}
+
+.titulo-tags {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.lista-tags-ia {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-ia {
+  padding: 6px 10px;
+  border: 1px solid rgba(166, 108, 255, 0.35);
+  border-radius: 999px;
+  color: var(--roxo);
+  background: rgba(166, 108, 255, 0.08);
+  font-size: 0.8rem;
+  font-weight: 700;
+}

@@ -6,6 +6,9 @@ function FormProduto({ aoCadastrar, aoAlterar, produtoEmEdicao, aoCancelarEdicao
   const [descricao, setDescricao] = useState("");
   const [preco, setPreco] = useState("");
 
+  const [categoria, setCategoria] = useState("");
+  const [tags, setTags] = useState([]);
+  const [resumo, setResumo] = useState("");
 
   const [erro, setErro] = useState("")
 
@@ -27,6 +30,9 @@ function FormProduto({ aoCadastrar, aoAlterar, produtoEmEdicao, aoCancelarEdicao
     setNome("");
     setDescricao("");
     setPreco("");
+    setCategoria("");
+    setTags([]);
+    setResumo("");
     setErro("");
   }
   // ================================================================
@@ -61,6 +67,10 @@ function FormProduto({ aoCadastrar, aoAlterar, produtoEmEdicao, aoCancelarEdicao
 
       // A resposta da IA passa diretamente para o campo descrição.
       setDescricao(dados.descricao);
+      setCategoria(dados.categoria);
+      setTags(dados.tags);
+      setResumo(dados.resumo);
+
     } catch (erro) {
       console.error(erro);
       setErro("Não foi possível conectar ao serviço de IA.");
@@ -157,6 +167,53 @@ function FormProduto({ aoCadastrar, aoAlterar, produtoEmEdicao, aoCancelarEdicao
             </button>
           </div>
         </label>
+
+        <label>
+          Categoria suegerida pela IA
+        <input
+          type="text"
+          value={categoria}
+          onChange={(evento) => setCategoria(evento.target.value)}
+          placeholder="Categoria do produto"        
+        />
+        </label>
+
+        <label>
+          Resumo
+        <input
+          type="text"
+          value={resumo}
+          onChange={(evento) => setResumo(evento.target.value)}
+          placeholder="Resumo do produto"        
+        />
+        </label>
+
+        {tags.length > 0 && (
+
+          <div className="tags-ia">
+
+            <span className="titulo-tags" >Tags sugeridas pela IA</span>
+
+            <div className="lista-tags-ia">
+
+              {tags.map((tag, index)=> ( 
+                
+                <span key={index} className="tag-ia">
+
+                  {tag}
+
+                </span>
+
+
+              ))}
+            </div>
+          </div>
+        )}
+
+
+
+
+
 
         <label>
           Preço

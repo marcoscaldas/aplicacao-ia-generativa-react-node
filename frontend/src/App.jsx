@@ -55,6 +55,10 @@ function App() {
       // Atualiza o estado sem precisar recarregar a página.
       setProdutos((produtosAtuais) => [...produtosAtuais, novoProduto]);
       setMensagem("Produto cadastrado com sucesso.");
+
+      setTimeout(()=> { setMensagem("") }, 3000)
+
+
     } catch (erro){
       setMensagem("Não foi possível cadastrar o produto.", erro);
     }
