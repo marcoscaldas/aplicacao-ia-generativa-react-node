@@ -1,12 +1,10 @@
-const {GoogleGenAI} = require("@google/genai");
+const {GoogleGenAI, Type} = require("@google/genai");
 
 async function gerarDescricao(req, res){
 
     try {
 
         const {nome, preco} = req.body;
-
-
         
 
         if(!nome || !nome.trim()){
@@ -23,22 +21,81 @@ async function gerarDescricao(req, res){
 
         const ia = new GoogleGenAI({apiKey: process.env.GEMINI_API_KEY});
 
-        const prompt = `Crie uma descrição curta e objetiva para um produto de catálogo online.
+
+
+        const prompt = `Analise o produto abaixo
+        para um catálogo online.
         Produto: ${nome.trim()}        
         Preço: ${preco ? `R$ ${preco}` : "não informado"}
-        Use no máximo 2 frases. Não invente especificações técnicas que não foram informadas.`;
+
+        Gere uma descrição curta e objetiva,
+        uma categoria adequada,
+        de 3 a 5 tags e um resumo curto.
+
+        Não invente espedificações técnicas
+        quen não foram informadas.`;
+
+
+        const schemaProduto = {
+
+            type: Type.OBJECT,
+
+            properties:{
+
+                descricao: {
+
+                    type: Type.STRING,
+                    description:
+                        "Descrição curta e objetiva do produto, com no máximo 2 frases."
+                },
+
+
+                categoria:{
+                    type: Type.STRING,
+                    description:
+                        "Categoria adequada para o produto em um catálogo online."
+                },
+
+                tags:{
+                    type: Type.ARRAY,
+                    items:{
+                        type: Type.STRING
+                    },
+                    description:
+                        "Lista contendo de 3 a 5 tags relacionadas a produto."
+                },
+
+                resumo:{
+
+                    type: Type.STRING,
+                    description:
+                        "Resumo curto do produto em um frase."
+                }
+
+            },
+            required: ["descricao", "categoria", "tags", "resumo"]
+        };
+
+
+
 
         const resposta = await ia.models.generateContent({
 
             model: "gemini-3.5-flash-lite",
-            contents: prompt
+            contents: prompt,
+
+            config: {
+
+                responseMimeType: "application/json",
+                responseSchema: schemaProduto
+            }
         })
 
 
-        const descricao = resposta.text?.trim();
+        const textoResposta = resposta.text?.trim();
 
 
-        if(!descricao){
+        if(!textoResposta){
 
             return res.status(502).json({
                 mensagem: 'A IA não retornou uma descrição'
@@ -46,7 +103,50 @@ async function gerarDescricao(req, res){
 
         }
         
-        return res.json({descricao});
+
+        let dados;
+
+        try {
+            
+            dados = JSON.parse(textoResposta);
+
+        } catch (erro) {
+            
+            console.error("Resposta da IA não é um JSON válido: ", textoResposta);
+
+            return res.status(502).json({
+                mensagem: "A IA retornou uma resposta em formato inválido"
+            })
+
+        }
+
+
+        const respostaValida =
+
+            typeof dados.descricao === 'string' && dados.descricao.trim() &&
+            typeof dados.categoria === 'string' && dados.categoria.trim() &&
+            Array.isArray(dados.tags) &&
+            dados.tags.length >= 1 &&
+            dados.tags.every(tag => typeof tag === 'string' && tag.trim()) &&
+            typeof dados.resumo === 'string' && dados.resumo.trim();
+
+
+        if(!respostaValida){
+            console.error("Resposta da IA fora da estrutura esperada: ", dados);
+
+            return res.status(502).json({
+                mensagem: "A IA retornou dados fora da estrutura esperada"
+            })
+
+        }
+
+        return res.json({
+
+            descricao: dados.descricao.trim(),
+            categoria: dados.categoria.trim(),
+            tags: dados.tags.map(tag => tag.trim()),
+            resumo: dados.resumo.trim()
+        })
 
         
     } catch (erro) {
