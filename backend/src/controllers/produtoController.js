@@ -1,86 +1,123 @@
-const produtos = require("../data/produtos");
+const Produto = require('../models/Produto')
 
-function listarProdutos(req, res) {
-  res.json(produtos);
+//LISTAR
+async function listarProdutos(req, res){
+
+    try{
+
+        const produtos = await Produto.find().sort({createdAt: 1});
+        res.json(produtos);
+
+    }catch(erro){
+        console.error(erro);
+
+        res.status(500).json({
+            mensagem: "Não foi possível carregar os produtos"
+        });
+    }
 }
-
-function cadastrarProduto(req, res) {
-  const { nome, descricao, preco } = req.body;
-
-  if (!nome || preco === undefined) {
-    return res.status(400).json({
-      mensagem: "Nome e preço são obrigatórios."
-    });
-  }
-
-  const novoProduto = {
-    id: produtos.length > 0 ? produtos[produtos.length - 1].id + 1 : 1,
-    nome,
-    descricao: descricao || "",
-    preco: Number(preco)
-  };
-
-  produtos.push(novoProduto);
-
-  res.status(201).json(novoProduto);
-}
+//CADASTRAR
+async function cadastrarProduto(req, res){
 
 
+    try{
+        const {nome, descricao, categoria, tags, resumo, preco} = req.body
 
+        const novoProduto = await Produto.create({
 
-function alterarProduto(req, res){
+            nome,
+            descricao: descricao || "",
+            categoria: categoria || "",
 
-  const id = Number(req.params.id) 
-  const { nome, descricao, preco } = req.body;
+            tags: Array.isArray(tags) ? tags: [],
 
-  const produto = produtos.find(produto => produto.id === id)
+            resumo: resumo || "",
+            preco: Number(preco)
+        });
 
-  if(!produto){
-    return res.status(404).json({
-      mensagem: 'Produto não encontrado'
-    })  
-  }
+        res.status(201).json(novoProduto);
+    }catch(erro){
 
-  if(!nome || !preco === undefined){      
-    return res.status(400).json({
-      mensagem: 'Nome e preço são obrigatórios.'
-    });
-  }
+        console.error(erro);
 
-  produto.nome = nome;
-  produto.descricao = descricao || ""
-  produto.preco = Number(preco)
-
-  res.json(produto)
+        res.status(500).json({
+            mensagem: 'Não foi possível cadastrar o produto'
+        })
+    }
 
 }
 
+//ALTERAR
+async function alterarProduto(req, res){
 
-function excluirProduto(req, res){
+    try{
+        const {nome, descricao, categoria, tags, resumo, preco} = req.body
 
-  const id = Number(req.params.id) 
-
-  const indice = produtos.findIndex(produto => produto.id === id)
-
-  if(indice === -1){
-
-    return res.status(404).json({
-      mensagem: 'Produto não encontrado.'
-    })
-  }
+        const produtoAlterado = await Produto.findByIdAndUpdate(
 
 
-  produtos.splice(indice, 1)
+            req.params.id,
+            {
+               nome,
+               descricao,
+               categoria,
+               tags,
+               resumo,
+               preco : Number(preco)
+            },
+            {
+                new: true,
+                runValidators: true,
+            }
+        );
 
-  res.status(200).json({
-    mensagem: 'Produto excluído com sucesso.'
-  });
+        if(!produtoAlterado){
+
+            return res.status(404).json({
+                mensagem: 'Produto não encontrado.'
+            })
+        }
+
+        res.json(produtoAlterado);
+
+    }catch(erro){
+        console.error(erro)
+         res.status(500).json({
+            mensagem: 'Não foi possível alterar o produto'
+        })
+    }
 }
 
+//EXCLUIR
+async function excluirProduto(req, res){
 
-module.exports = {
-  listarProdutos,
-  cadastrarProduto,
-  alterarProduto,
-  excluirProduto
-};
+    try{
+
+        const produtoExcluido = await Produto.findByIdAndDelete(req.params.id);
+
+         if(!produtoExcluido){
+
+            return res.status(404).json({
+                mensagem: 'Produto não encontrado.'
+            })
+        }
+        res.json({
+            mensagem: 'Produto excluido com sucesso.'
+        });
+
+    }catch(erro){
+
+        console.error(erro)
+         res.status(500).json({
+            mensagem: 'Não foi possível excluir o produto'
+        });
+    }
+}
+
+module.exports ={
+    listarProdutos,
+    cadastrarProduto,
+    alterarProduto,
+    excluirProduto
+
+}

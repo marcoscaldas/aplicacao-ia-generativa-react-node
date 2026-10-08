@@ -1,0 +1,42 @@
+INSERIR COM POST 
+http://localhost:3000/api/produtos
+
+{
+  "nome": "Monitor Gamer UltraWide",
+  "descricao": "Monitor gamer de alta resolução para jogos e produtividade.",
+  "categoria": "Monitores",
+  "tags": [
+    "gamer",
+    "ultrawide",
+    "monitor"
+  ],
+  "resumo": "Monitor UltraWide para jogos e produtividade.",
+  "preco": 2999.90
+}
+
+**********************************************************************************
+
+
+LISTAR COM GET  
+http://localhost:3000/api/produtos
+
+**********************************************************************************
+
+
+
+ALTERAR COM PUT 
+http://localhost:3000/api/produtos/COLE_O_ID_AQUI
+
+
+**********************************************************************************
+
+
+DELETAR COM DELETE   MAS ANTES CONSULTAR E PEGAR O ID
+
+http://localhost:3000/api/produtos/COLE_O_ID_AQUI
+
+
+
+test 
+
+MONGODB_URI=mongodb://127.0.0.1:27017/catalogo_ia

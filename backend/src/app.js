@@ -1,10 +1,12 @@
 require("dotenv").config()
+const conectarBanco = require('./config/database');
 
 const express = require("express");
 const produtoRoutes = require("./routes/produtoRoutes");
 const iaRoutes = require('./routes/iaRoutes')
 
 
+conectarBanco()
 const app = express();
 const PORT = 3000;
 

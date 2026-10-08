@@ -1,5 +1,7 @@
 const express = require("express");
+
 const {
+
   listarProdutos,
   cadastrarProduto,
   alterarProduto,
@@ -10,10 +12,11 @@ const {
 const router = express.Router();
 
 router.get("/", listarProdutos);
+
 router.post("/", cadastrarProduto);
-router.put('/:id', alterarProduto );
-router.delete('/:id', excluirProduto)
 
+router.put("/:id", alterarProduto);
 
+router.delete("/:id", excluirProduto);
 
 module.exports = router;
