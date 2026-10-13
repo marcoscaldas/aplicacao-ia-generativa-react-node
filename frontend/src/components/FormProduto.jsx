@@ -21,6 +21,10 @@ function FormProduto({ aoCadastrar, aoAlterar, produtoEmEdicao, aoCancelarEdicao
       setNome(produtoEmEdicao.nome);
       setDescricao(produtoEmEdicao.descricao || "");
       setPreco(produtoEmEdicao.preco);
+
+      setCategoria(produtoEmEdicao.categoria || "");
+      setTags(Array.isArray(produtoEmEdicao.tags) ? produtoEmEdicao.tags : []);
+      setResumo(produtoEmEdicao.resumo || "");
     }
   }, [produtoEmEdicao]);
   // ============================================================================
@@ -98,13 +102,16 @@ function FormProduto({ aoCadastrar, aoAlterar, produtoEmEdicao, aoCancelarEdicao
     const produto = {
       nome: nome.trim(),
       descricao: descricao.trim(),
+      categoria: categoria.trim(),
+      tags,
+      resumo: resumo.trim(),
       preco: Number(preco)
     };
 
     // ==================== ALTERADO: cadastrar OU alterar ====================
     if (produtoEmEdicao) {
       aoAlterar({
-        id: produtoEmEdicao.id,
+        _id: produtoEmEdicao._id,
         ...produto
       });
     } else {

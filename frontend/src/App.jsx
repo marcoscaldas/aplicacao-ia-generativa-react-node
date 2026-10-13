@@ -2,12 +2,15 @@ import { use, useEffect, useState } from "react";
 import Header from "./components/Header";
 import FormProduto from "./components/FormProduto";
 import ListaProdutos from "./components/ListaProdutos";
+import ProdutoDetalhes from "./components/ProdutoDetalhes";
 
 import Footer from "./components/Footer";
+
 
 function App() {
   const [produtos, setProdutos] = useState([]);
   const [mensagem, setMensagem] = useState("");
+  const [produtoSelecionado, setProdutoSelecionado]  = useState(null)
 
   const [busca, setBusca] = useState("");
 
@@ -71,7 +74,7 @@ function App() {
 
     try {
 
-      const resposta = await fetch(`/api/produtos/${produto.id}`,{
+      const resposta = await fetch(`/api/produtos/${produto._id}`,{
 
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
@@ -92,7 +95,7 @@ function App() {
       setProdutos((produtosAtuais)=>
 
         produtosAtuais.map((item)=>
-          item.id === produtoalterado.id ? produtoalterado : item
+          item._id === produtoalterado._id ? produtoalterado : item
 
         )
       )
@@ -126,11 +129,11 @@ function App() {
       }
 
       setProdutos((produtosAtuais)=> 
-        produtosAtuais.filter((produto)=> produto.id !==  id)
+        produtosAtuais.filter((produto)=> produto._id !==  id)
       
       )
 
-      if(produtoEmEdicao?.id === id){
+      if(produtoEmEdicao?._id === id){
         setProdutoemEdicao(null)
       }
 
@@ -207,8 +210,15 @@ function App() {
           busca ={busca}
           aoEditar={setProdutoemEdicao}
           aoExcluir={excluirProduto}
-        
+
+          aoDetalhes = {setProdutoSelecionado}
         />
+
+        {produtoSelecionado && (
+          <ProdutoDetalhes produto={produtoSelecionado} aoFechar={()=> setProdutoSelecionado(null)} />
+        )}
+
+
       </main>
 
       <Footer />

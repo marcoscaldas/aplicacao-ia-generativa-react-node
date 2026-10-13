@@ -1,4 +1,4 @@
-function Produto({ produto, aoEditar, aoExcluir }) {
+function Produto({ produto, aoEditar, aoExcluir, aoDetalhes }) {
 
   return (
    
@@ -6,7 +6,7 @@ function Produto({ produto, aoEditar, aoExcluir }) {
 
       <div className="card-topo">
 
-        <span className="codigo-produto"> ITEM #{produto.id}</span>
+        <span className="codigo-produto"> ITEM #{produto._id}</span>
         <span className="disponivel">DISPONÍVEL</span>
       </div>
 
@@ -24,6 +24,16 @@ function Produto({ produto, aoEditar, aoExcluir }) {
       {/* //BOTOES DO CRUD */}
 
       <div className="acoes-card">
+        <button
+          type="button"
+          className="botao-detalhes"
+          onClick={()=> aoDetalhes(produto)}
+        >
+          Ver Detalhes
+        </button>
+
+
+
 
         <button
           type="button"
@@ -36,7 +46,7 @@ function Produto({ produto, aoEditar, aoExcluir }) {
         <button
           type="button"
           className="botao-excluir"
-          onClick={()=> aoExcluir(produto.id)}
+          onClick={()=> aoExcluir(produto._id)}
         >
           Excluir
         </button>
